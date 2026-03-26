@@ -21,6 +21,25 @@ const Charts = (() => {
 
   const BAR_PALETTE = [COLORS.primary, COLORS.accent, COLORS.success, COLORS.warning, COLORS.error, '#a29bfe'];
 
+  function setupCanvas(canvas, ctx) {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const cssWidth = Math.max(1, Math.floor(rect.width || canvas.clientWidth || 400));
+    const cssHeight = Math.max(1, Math.floor(rect.height || canvas.clientHeight || 220));
+    const pixelWidth = Math.max(1, Math.floor(cssWidth * dpr));
+    const pixelHeight = Math.max(1, Math.floor(cssHeight * dpr));
+
+    if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+      canvas.width = pixelWidth;
+      canvas.height = pixelHeight;
+    }
+
+    // Reset transform each draw so scaling does not compound.
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssWidth, cssHeight);
+    return { W: cssWidth, H: cssHeight };
+  }
+
   /**
    * Draw a horizontal bar chart.
    * @param {string} canvasId
@@ -30,25 +49,29 @@ const Charts = (() => {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
+    if (!ctx) return;
 
-    // HiDPI support
-    canvas.width = canvas.clientWidth * dpr;
-    canvas.height = canvas.clientHeight * dpr;
-    ctx.scale(dpr, dpr);
+    const { W, H } = setupCanvas(canvas, ctx);
 
-    const W = canvas.clientWidth;
-    const H = canvas.clientHeight;
-    const padding = { top: 10, right: 20, bottom: 30, left: 180 };
+    if (!Array.isArray(data) || data.length === 0) {
+      ctx.fillStyle = COLORS.muted;
+      ctx.font = '13px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('No data available', W / 2, H / 2);
+      return;
+    }
+
+    const paddingLeft = Math.max(120, Math.min(180, Math.floor(W * 0.35)));
+    const padding = { top: 10, right: 20, bottom: 30, left: paddingLeft };
     const barHeight = 24;
     const gap = 12;
     const maxVal = Math.max(...data.map(d => d.value), 1);
-
-    ctx.clearRect(0, 0, W, H);
+    const drawableWidth = Math.max(0, W - padding.left - padding.right);
 
     data.forEach((d, i) => {
       const y = padding.top + i * (barHeight + gap);
-      const barWidth = ((W - padding.left - padding.right) * d.value) / maxVal;
+      const barWidth = (drawableWidth * d.value) / maxVal;
 
       // Label
       ctx.fillStyle = COLORS.text;
@@ -59,9 +82,13 @@ const Charts = (() => {
 
       // Bar
       ctx.fillStyle = BAR_PALETTE[i % BAR_PALETTE.length];
-      ctx.beginPath();
-      ctx.roundRect(padding.left, y, barWidth, barHeight, 4);
-      ctx.fill();
+      if (typeof ctx.roundRect === 'function') {
+        ctx.beginPath();
+        ctx.roundRect(padding.left, y, barWidth, barHeight, 4);
+        ctx.fill();
+      } else {
+        ctx.fillRect(padding.left, y, barWidth, barHeight);
+      }
 
       // Value
       ctx.fillStyle = COLORS.text;

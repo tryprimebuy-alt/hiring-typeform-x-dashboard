@@ -206,6 +206,16 @@
   let allResponses = [];
   let isRefreshing = false;
 
+  function openModal() {
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+  }
+
   // --- Init ---
   async function init() {
     await loadAndRender();
@@ -237,9 +247,15 @@
       ResponseStorage.exportCSV(allResponses, headers);
     });
 
-    btnCloseModal.addEventListener('click', () => modal.style.display = 'none');
+    btnCloseModal.addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.style.display = 'none';
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'flex') {
+        e.preventDefault();
+        closeModal();
+      }
     });
 
     // Pull fresh data periodically when connected to shared backend.
@@ -427,7 +443,7 @@
       </div>
     `;
 
-    modal.style.display = 'flex';
+    openModal();
   }
 
   // --- Boot ---
