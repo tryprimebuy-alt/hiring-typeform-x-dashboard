@@ -140,24 +140,46 @@ const ResponseStorage = (() => {
   }
 
   function exportCSV(responses, headers) {
-    const csvRows = [headers.join(',')];
-    responses.forEach(r => {
-      const row = headers.map(h => {
-        let val = r[h] || r.answers?.[h] || '';
-        if (Array.isArray(val)) val = val.join('; ');
-        val = String(val).replace(/"/g, '""');
-        return `"${val}"`;
+    const safeResponses = Array.isArray(responses) ? responses : [];
+    const safeHeaders = Array.isArray(headers) ? headers : [];
+    if (safeHeaders.length === 0) return;
+
+    const csvRows = [safeHeaders.join(',')];
+    safeResponses.forEach((response) => {
+      const row = safeHeaders.map((header) => {
+        let value = '';
+        if (response && response[header] !== undefined && response[header] !== null) {
+          value = response[header];
+        } else if (
+          response &&
+          response.answers &&
+          response.answers[header] !== undefined &&
+          response.answers[header] !== null
+        ) {
+          value = response.answers[header];
+        }
+
+        if (Array.isArray(value)) value = value.join('; ');
+        value = String(value).replace(/"/g, '""');
+        return `"${value}"`;
       });
       csvRows.push(row.join(','));
     });
 
-    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+    // Add UTF-8 BOM for Excel compatibility.
+    const csvContent = `\uFEFF${csvRows.join('\n')}`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `responses_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `responses_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Delay revocation to avoid canceling the download in some browsers.
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   return { getAll, importJSON, exportCSV };
