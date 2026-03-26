@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Internal dashboard — view, score, and filter candidate responses">
+  <title>Response Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css?v=20260321b">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header id="dashboard-header">
+    <div class="header-left">
+      <h1>📊 Response Dashboard</h1>
+      <span class="badge" id="total-count">0 responses</span>
+    </div>
+    <div class="header-right">
+      <input type="text" id="search-input" placeholder="Search candidates..." class="search-box">
+      <button id="btn-import" class="btn btn-secondary">Import JSON</button>
+      <button id="btn-export" class="btn btn-primary">Export CSV</button>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <section id="filters-bar">
+    <div class="filter-group">
+      <label>Score Range</label>
+      <select id="filter-score">
+        <option value="all">All</option>
+        <option value="high">High (70%+)</option>
+        <option value="mid">Mid (40–69%)</option>
+        <option value="low">Low (&lt;40%)</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Sort By</label>
+      <select id="sort-by">
+        <option value="score-desc">Score ↓</option>
+        <option value="score-asc">Score ↑</option>
+        <option value="date-desc">Newest first</option>
+        <option value="date-asc">Oldest first</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Availability</label>
+      <select id="filter-availability">
+        <option value="all">All</option>
+        <option value="immediate">Immediately</option>
+        <option value="7_10_days">7–10 days</option>
+        <option value=">2_weeks">2+ weeks</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Stats Cards -->
+  <section id="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-total">0</div>
+      <div class="stat-label">Total Responses</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-avg-score">—</div>
+      <div class="stat-label">Avg Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-high">0</div>
+      <div class="stat-label">High Scorers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-immediate">0</div>
+      <div class="stat-label">Immediate Start</div>
+    </div>
+  </section>
+
+  <!-- Chart area -->
+  <section id="charts-area">
+    <div class="chart-card" id="score-distribution-chart">
+      <h3>Score Distribution</h3>
+      <canvas id="canvas-score-dist" width="400" height="200"></canvas>
+    </div>
+    <div class="chart-card" id="skills-chart">
+      <h3>Education Breakdown</h3>
+      <canvas id="canvas-skills" width="400" height="200"></canvas>
+    </div>
+  </section>
+
+  <!-- Response Table -->
+  <section id="response-table-section">
+    <table id="response-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>City</th>
+          <th>Education</th>
+          <th>Score</th>
+          <th>Submitted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="response-tbody">
+        <!-- Rows rendered by app.js -->
+      </tbody>
+    </table>
+    <div id="empty-state" style="display:none;">
+      <p>No responses yet. Share your typeform to start collecting!</p>
+    </div>
+  </section>
+
+  <!-- Detail Modal -->
+  <div id="detail-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <button class="modal-close" id="btn-close-modal">&times;</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for import -->
+  <input type="file" id="file-import" accept=".json" style="display:none;">
+
+  <script src="js/backend-config.js?v=20260321b"></script>
+  <script src="js/storage.js?v=20260321b"></script>
+  <script src="js/scoring.js?v=20260321b"></script>
+  <script src="js/charts.js?v=20260321b"></script>
+  <script src="js/app.js?v=20260321b"></script>
+</body>
+</html>

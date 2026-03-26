@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "description": "Scoring criteria for Customer Research Associate applicants. Each criterion maps to a question ID, has a weight (0-10), and defines how answers translate to scores.",
+  "criteria": [
+    {
+      "questionId": "english_comfort",
+      "label": "English Speaking Comfort",
+      "weight": 9,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "yes_comfortable", "score": 10 },
+        { "value": "somewhat", "score": 5 },
+        { "value": "no", "score": 1 }
+      ]
+    },
+    {
+      "questionId": "hindi_comfort",
+      "label": "Hindi Speaking Comfort",
+      "weight": 5,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "fluent", "score": 10 },
+        { "value": "conversational", "score": 6 },
+        { "value": "no", "score": 2 }
+      ]
+    },
+    {
+      "questionId": "work_setup",
+      "label": "Work Setup",
+      "weight": 8,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "all_three", "score": 10 },
+        { "value": "no_quiet_space", "score": 4 },
+        { "value": "smartphone_only", "score": 1 }
+      ]
+    },
+    {
+      "questionId": "availability",
+      "label": "Availability",
+      "weight": 6,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "immediate", "score": 10 },
+        { "value": "7_10_days", "score": 7 },
+        { "value": ">2_weeks", "score": 2 }
+      ]
+    },
+    {
+      "questionId": "education",
+      "label": "Educational Background",
+      "weight": 7,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "bpharm", "score": 10 },
+        { "value": "pharmd", "score": 10 },
+        { "value": "bams", "score": 9 },
+        { "value": "bhms", "score": 9 },
+        { "value": "nursing_health", "score": 8 },
+        { "value": "psych_socio", "score": 7 },
+        { "value": "journalism", "score": 6 },
+        { "value": "life_sciences", "score": 7 },
+        { "value": "other_interested", "score": 4 },
+        { "value": "other_none", "score": 1 }
+      ]
+    },
+    {
+      "questionId": "domain_knowledge",
+      "label": "Joint Health Domain Knowledge",
+      "weight": 8,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "formal_education", "score": 10 },
+        { "value": "personal_experience", "score": 7 },
+        { "value": "basics", "score": 5 },
+        { "value": "willing_to_learn", "score": 3 },
+        { "value": "no_idea", "score": 0 }
+      ]
+    },
+    {
+      "questionId": "business_understanding",
+      "label": "D2C / Digital Marketing Understanding",
+      "weight": 6,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "understands", "score": 10 },
+        { "value": "surface_level", "score": 6 },
+        { "value": "interested", "score": 3 },
+        { "value": "not_interested", "score": 0 }
+      ]
+    },
+    {
+      "questionId": "technical_comfort",
+      "label": "Technical Comfort (Sheets, Drive, etc.)",
+      "weight": 7,
+      "maxScore": 10,
+      "type": "choice",
+      "options": [
+        { "value": "very_comfortable", "score": 10 },
+        { "value": "comfortable", "score": 6 },
+        { "value": "not_comfortable", "score": 2 }
+      ]
+    },
+    {
+      "questionId": "marketing_insights",
+      "label": "Marketing Insight Task Quality",
+      "weight": 10,
+      "maxScore": 10,
+      "type": "textarea",
+      "scoringNotes": "Highest weight — this is the core competency test. Score based on: quality of 3 insights, specificity, marketing relevance, and depth of customer empathy shown."
+    }
+  ],
+  "tiers": {
+    "high": { "minPercent": 70, "label": "Strong Candidate", "action": "Schedule interview" },
+    "mid": { "minPercent": 40, "label": "Potential Fit", "action": "Review manually" },
+    "low": { "minPercent": 0, "label": "Not a Match", "action": "Auto-reject or hold" }
+  }
+}

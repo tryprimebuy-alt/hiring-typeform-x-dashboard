@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Application form for VoC Researcher position">
+  <title>Application Form</title>
+  <link rel="stylesheet" href="css/styles.css?v=20260321e">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="form-container">
+    <!-- Progress bar -->
+    <div id="progress-bar">
+      <div id="progress-fill"></div>
+    </div>
+
+    <!-- Question slides rendered here by app.js -->
+    <main id="question-area"></main>
+
+    <!-- Navigation -->
+    <nav id="form-nav">
+      <button id="btn-prev" class="nav-btn" disabled>← Back</button>
+      <button id="btn-next" class="nav-btn primary">Next →</button>
+      <button id="btn-submit" class="nav-btn submit" style="display:none;">Submit ✓</button>
+    </nav>
+  </div>
+
+  <!-- Thank-you screen (hidden by default) -->
+  <div id="thank-you-screen" style="display:none;">
+    <h1>Thank you!</h1>
+    <p>Your application has been submitted successfully.</p>
+    <p>If selected, our team will reach out to you via WhatsApp with the next steps.</p>
+  </div>
+
+  <script src="js/questions.js?v=20260321e"></script>
+  <script src="js/backend-config.js?v=20260321e"></script>
+  <script src="js/storage.js?v=20260321e"></script>
+  <script src="js/app.js?v=20260321e"></script>
+</body>
+</html>
